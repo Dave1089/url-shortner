@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Dave1089/url-shortner/issues"
   },
-  "homepage": "https://github.com/Dave1089/url-shortner#readme"
+  "homepage": "https://github.com/Dave1089/url-shortner#readme",
+  "dependencies": {
+    "shortid": "^2.2.6"
+  }
 }
