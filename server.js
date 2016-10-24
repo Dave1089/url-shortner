@@ -22,11 +22,11 @@ app.get('/new/*', function (req, res){
       
         if(err) throw err
         responseData = JSON.stringify(newURL)
-        
+        res.send(responseData)
         db.close()
         
         })
-         res.send(responseData)
+         
     })
  
 })
