@@ -1,7 +1,7 @@
 var express = require("express")
 var app = express();
 var mongo = require("mongodb").MongoClient
-var url = 'mongodb://localhost:27017/microservice'
+var url = process.env.MONGOLAB_URI //'mongodb://localhost:27017/microservice'
 var shortid = require('shortid');
 var port = process.env.PORT || 8080;
 // var port = 8080;
