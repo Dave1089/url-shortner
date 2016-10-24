@@ -10,7 +10,7 @@ app.use(express.static(__dirname + '/public'))
 var responseData = ''
 app.get('/new/*', function (req, res){
   var param = req.params[0]
-  
+   
   mongo.connect(url,function(err,db){
     if(err) throw err;
   var collection = db.collection('shortner')
@@ -22,8 +22,9 @@ app.get('/new/*', function (req, res){
       
         if(err) throw err
         responseData = JSON.stringify(newURL)
-        db.close()
         res.send(responseData)
+        db.close()
+        
         })
     })
 
