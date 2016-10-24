@@ -26,8 +26,9 @@ app.get('/new/*', function (req, res){
         db.close()
         
         })
+         res.send(responseData)
     })
-  res.send(responseData)
+ 
 })
 
 app.get('/*', function (req, res){
