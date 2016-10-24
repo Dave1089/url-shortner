@@ -16,7 +16,7 @@ app.get('/new/*', function (req, res){
   var collection = db.collection('shortner')
   var newURL = {
       "Original URL": param,
-      "Short URL": "http://short.y/" + shortid.generate()
+      "Short URL": req.headers.host + '/' + shortid.generate()
   }
   collection.insert(newURL,function(err,data){
       
@@ -26,10 +26,33 @@ app.get('/new/*', function (req, res){
         res.send(responseData)
         })
     })
-    //  responseData = JSON.stringify({"Original URL": param,"Short URL": "http://short.y/" + shortid.generate() })
-    
 
 })
+
+app.get('/*', function (req, res){
+  var shorty = req.headers.host + req.url
+  // res.send(shorty)
+  mongo.connect(url,function(err,db){
+    if(err) throw (err);
+    var collection = db.collection('shortner')
+    collection.findOne({"Short URL": shorty}, function(err, doc) {
+    if(err) throw (err);
+    // Checking if doc is not null
+    if(doc != null){
+    var data = doc['Original URL']
+    res.redirect(data);
+    }
+    else
+      {
+      res.send("Record not found");
+        }
+    })
+    
+    db.close()
+    })
+  
+ })
+
 
 app.listen(port, function () {
   console.log('The app listening on port ' + port +  '!');
