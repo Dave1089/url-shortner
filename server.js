@@ -1,34 +1,36 @@
 var express = require("express")
 var app = express();
+var mongo = require("mongodb").MongoClient
+var url = 'mongodb://localhost:27017/microservice'
 var shortid = require('shortid');
 var port = process.env.PORT || 8080;
+// var port = 8080;
 app.use(express.static(__dirname + '/public'))
-// app.get('/:path', function (req, res) {
-//   var param = req.params.path
-//   if(isNaN(param)){
-//     var check = Date.parse(param);
-//     if(isNaN(check)){
-//       natural = null
-//       unix = null 
-//     }
-//     else{
-//     unix = new Date(param).getTime()/1000
-//     natural = param
-//     }
-//   }
-//   else {
-//     unix = Number(param)
-//     var change = new Date(param*1000)
-//     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-//     var y = change.getFullYear();
-//     var m = months[change.getMonth()]
-//     var d = change.getDate()
-//     natural = m + " " + d + "," + " " + y
-//   }
-//   var data = JSON.stringify({"unix" : unix , "natural" : natural})
-//   res.send(data);
-// });
+
+var responseData = ''
+app.get('/new/*', function (req, res){
+  var param = req.params[0]
+  
+  mongo.connect(url,function(err,db){
+    if(err) throw err;
+  var collection = db.collection('shortner')
+  var newURL = {
+      "Original URL": param,
+      "Short URL": "http://short.y/" + shortid.generate()
+  }
+  collection.insert(newURL,function(err,data){
+      
+        if(err) throw err
+        responseData = JSON.stringify(newURL)
+        db.close()
+        res.send(responseData)
+        })
+    })
+    //  responseData = JSON.stringify({"Original URL": param,"Short URL": "http://short.y/" + shortid.generate() })
+    
+
+})
 
 app.listen(port, function () {
-  console.log('The app listening on port 8080!');
+  console.log('The app listening on port ' + port +  '!');
 });
