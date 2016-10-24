@@ -18,10 +18,10 @@ app.get('/new/*', function (req, res){
       "Original URL": param,
       "Short URL": req.headers.host + '/' + shortid.generate()
   }
+  responseData = JSON.stringify(newURL)
   collection.insert(newURL,function(err,data){
       
         if(err) throw err
-        responseData = JSON.stringify(newURL)
         res.end(responseData)
         db.close()
         
