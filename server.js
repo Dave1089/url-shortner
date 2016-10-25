@@ -10,7 +10,12 @@ app.use(express.static(__dirname + '/public'))
 var responseData = ''
 app.get('/new/*', function (req, res){
   var param = req.params[0]
-   
+  var patt = new RegExp("(http|ftp|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?");
+  if(patt.test(param) === false){
+    res.end(JSON.stringify({"Error" : "Wrong url format, make sure you have a valid protocol and real site."}))
+  
+  }
+  else{
   mongo.connect(url,function(err,db){
     if(err) throw err;
   var collection = db.collection('shortner')
@@ -28,8 +33,9 @@ app.get('/new/*', function (req, res){
         })
          
     })
- 
+  } 
 })
+
 
 app.get('/*', function (req, res){
   var shorty = req.headers.host + req.url
